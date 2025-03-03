@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remote Desktop Activity</title>
+
+    <!-- 🔹 Load Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>    
+
+    <script>
+        // ✅ Replace with your Firebase project configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCjl4L2Prn0TPsHtJNvKPrhnblGPeFccGE",
+            authDomain: "remote-desktop-activity.firebaseapp.com",
+            databaseURL: "https://remote-desktop-activity-default-rtdb.firebaseio.com",
+            projectId: "remote-desktop-activity",
+            storageBucket: "remote-desktop-activity.appspot.com",
+            messagingSenderId: "954641144783",
+            appId: "1:954641144783:web:33442eedf06e298dab90ba"
+        };
+
+        // ✅ Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function fetchActivity() {
+            console.log("Fetching data from Firebase...");
+
+            database.ref("activity_status/last_active").on("value", (snapshot) => {
+                if (snapshot.exists()) {
+                    console.log("Firebase Data:", snapshot.val());
+                    document.getElementById("activity").innerText = "Last Active: " + snapshot.val();
+                } else {
+                    console.log("No data found in Firebase.");
+                    document.getElementById("activity").innerText = "No data available.";
+                }
+            }, function(error) {
+                console.error("Firebase Read Error:", error);
+            });
+        }
+
+        window.onload = fetchActivity;  // ✅ Ensures function runs after Firebase is initialized
+    </script>
+</head>
+<body>
+    <h2>Remote Desktop Last Active Time</h2>
+    <p id="activity">Loading...</p>
+</body>
+</html>
